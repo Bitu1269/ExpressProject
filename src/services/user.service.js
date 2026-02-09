@@ -25,32 +25,18 @@
 
 
 
-let users = [];
 
-export const getAll = (active) => {
-  if (active !== undefined) {
-    return users.filter(u => u.active === (active === "true"));
-  }
-  return users;
-};
 
-export const create = (data) => {
-  const user = {
-    id: Date.now().toString(),
-    ...data,
-  };
-  users.push(user);
-  return user;
-};
 
-export const update = (id, data) => {
-  const index = users.findIndex((u) => u.id === id);
-  if (index === -1) throw new Error("User not found");
+import User from "../models/user.model.js";
 
-  users[index] = { ...users[index], ...data };
-  return users[index];
-};
+export const getAll = async () => User.find();
 
-export const remove = (id) => {
-  users = users.filter((u) => u.id !== id);
-};
+export const create = async (data) => User.create(data);
+
+export const update = async (id, data) =>
+  User.findByIdAndUpdate(id, data, { new: true });
+
+export const remove = async (id) =>
+  User.findByIdAndDelete(id);
+
